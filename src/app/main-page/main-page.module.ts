@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainPageComponent } from './main-page.component';
+import { DialogInfo, MainPageComponent } from './main-page.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialExampleModule } from '../../material/material.module';
 import { RouterModule } from '@angular/router';
@@ -91,6 +91,7 @@ import {
     TrainingInputComponent,
     ConnectedUsersTableComponent,
     UsersProfileViewComponent,
+    DialogInfo,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

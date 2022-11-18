@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Realm from 'realm-web';
 import { ConnexionFormComponent } from '../connexion-form/connexion-form.component';
@@ -8,6 +8,11 @@ import { Subscription } from 'rxjs';
 import { BadgeDataService } from './badge-data.service';
 import ObjectID from 'bson-objectid';
 import { DatabaseService } from './database.service';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 // [{
 //   $lookup: {
@@ -53,16 +58,25 @@ export class MainPageComponent implements OnInit, OnDestroy {
     //window.alert('hello');
     this.subscription.unsubscribe();
   }
-  logRoute() {
-    this.backend.usersFromUser.findOne({}).then((result) => {
-      console.log(result);
+
+  openDialog(): void {
+    //console.log(analyseID)
+    const dialogRef = this.dialog.open(DialogInfo, {
+      width: '360px',
+      data: { _id: '' },
     });
+  }
+  logRoute() {
+    if (this.router.url == '/dashboard/home') {
+      this.openDialog();
+    }
   }
 
   constructor(
     public router: Router,
     public route: ActivatedRoute,
     private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
     public data: BadgeDataService,
     public backend: DatabaseService
   ) {}
@@ -121,9 +135,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.data.analysisDone();
   }
   isAnswering: boolean;
-  classement = [false,false,false]
+  classement = [false, false, false];
   ngOnInit() {
-
     this.backend.usersFromUser
       .aggregate([
         {
@@ -136,7 +149,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
         {
           $match: {
             roles: {
-              $nin: ['Invité'], //, 'Admin', 'Observateur'],
+              $nin: ['Invité', 'Admin', 'Observateur'],
             },
           },
         },
@@ -270,8 +283,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
           let index = result.indexOf(winner);
 
           if (winner._id == sessionStorage.getItem('userId')) {
-            this.classement[index]=true;
-            
+            this.classement[index] = true;
           }
         });
       });
@@ -436,5 +448,45 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
     return true;
     //yourDate.setDate(yourDate.getDate() + 1);
+  }
+}
+@Component({
+  selector: 'dialog-info',
+  templateUrl: 'dialog-info.html',
+})
+export class DialogInfo implements OnInit {
+  constructor(
+    private _snackBar: MatSnackBar,
+    public dialogRef: MatDialogRef<DialogInfo>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+  user: any;
+  mongo: any;
+  Analyses: any;
+  app = environment.application;
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 3000 });
+  }
+
+  ngOnInit() {
+    this.user = this.app.allUsers[sessionStorage.getItem('userId')];
+
+    // console.log(this.analysis.length);
+    this.mongo = this.user.mongoClient('Cluster0');
+    const Data = this.mongo.db('Data');
+    this.Analyses = Data.collection('Analyses');
+  }
+
+  onNoClick(val: boolean, id: any): void {
+    //console.log(this.data._id)
+    if (val) {
+      this.dialogRef.close(true);
+      this.openSnackBar('Analyse supprimée !', '');
+    }
+    //console.log(val)
+    else {
+      this.openSnackBar('Opération annulée.', '');
+      this.dialogRef.close(false);
+    }
   }
 }

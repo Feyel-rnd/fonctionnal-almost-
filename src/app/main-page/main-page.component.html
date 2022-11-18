@@ -188,6 +188,17 @@
     <button mat-button (click)="logRoute()">
       <mat-icon color="accent">information</mat-icon>
     </button>
+    <mat-chip-list class="ranking">
+      <mat-chip *ngIf="classement[0]" class="gold"
+        >🥇<span class="d-none d-sm-inline mx-1"> 1ère place</span></mat-chip
+      >
+      <mat-chip *ngIf="classement[1]" class="silver"
+        >🥈<span class="d-none d-sm-inline mx-1"> 2ème place</span></mat-chip
+      >
+      <mat-chip *ngIf="classement[2]" class="bronze"
+        >🥉<span class="d-none d-sm-inline mx-1"> 3ème place</span></mat-chip
+      >
+    </mat-chip-list>
     <span class="example-spacer"></span>
     <!-- <button mat-button [matMenuTriggerFor]="variableMenu">
       <mat-icon color="primary">menu</mat-icon>

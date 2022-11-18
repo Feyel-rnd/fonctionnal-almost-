@@ -17,6 +17,10 @@
   position: sticky;
   top: 0px;
 }
+.ranking {
+  position: absolute;
+  left: 40%;
+}
 
 .profile-btton {
   display: flex;
@@ -109,7 +113,29 @@ h1.example-app-name {
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
-
+.bronze {
+  background: linear-gradient(
+    45deg,
+    rgba(223, 182, 103, 1) 0%,
+    rgba(249, 243, 232, 1) 0%,
+    rgba(231, 192, 116, 1) 96%
+  );
+  animation-duration: 6s;
+  animation-name: bronzeShine;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.silver {
+  background: linear-gradient(
+    45deg,
+    rgba(160, 160, 160, 1) 0%,
+    rgba(232, 232, 232, 1) 0%
+  );
+  animation-duration: 6s;
+  animation-name: silverShine;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
 .gold {
   background: linear-gradient(
     45deg,
@@ -131,6 +157,30 @@ h1.example-app-name {
         rgba(242, 215, 12, 1) 0%,
         rgba(255, 255, 255, 1) 4% * $i,
         rgba(252, 235, 0, 1) 96%
+      );
+    }
+  }
+}
+
+@keyframes bronzeShine {
+  @for $i from 0 through 25 {
+    #{$i*1% + 75%} {
+      background: linear-gradient(
+        45deg,
+        rgba(223, 182, 103, 1) 0%,
+        rgba(249, 243, 232, 1) 4% * $i,
+        rgba(231, 192, 116, 1) 96%
+      );
+    }
+  }
+}
+@keyframes silverShine {
+  @for $i from 0 through 25 {
+    #{$i*1% + 75%} {
+      background: linear-gradient(
+        45deg,
+        rgba(160, 160, 160, 1) 0%,
+        rgba(232, 232, 232, 1) 4% * $i
       );
     }
   }
