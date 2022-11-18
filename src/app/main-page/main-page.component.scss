@@ -109,3 +109,29 @@ h1.example-app-name {
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
+
+.gold {
+  background: linear-gradient(
+    45deg,
+    rgba(242, 215, 12, 1) 0%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(252, 235, 0, 1) 96%
+  );
+  animation-duration: 6s;
+  animation-name: goldShine;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes goldShine {
+  @for $i from 0 through 25 {
+    #{$i*1% + 75%} {
+      background: linear-gradient(
+        45deg,
+        rgba(242, 215, 12, 1) 0%,
+        rgba(255, 255, 255, 1) 4% * $i,
+        rgba(252, 235, 0, 1) 96%
+      );
+    }
+  }
+}

@@ -37,21 +37,21 @@ button.example-custom-date-class {
     rgba(249, 243, 232, 1) 26%,
     rgba(231, 192, 116, 1) 96%
   );
-  // animation-duration: 8s;
-  // animation-name: bronzeShine;
-  // animation-iteration-count: infinite;
-  // animation-direction: alternate;
+  animation-duration: 6s;
+  animation-name: bronzeShine;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 .silver {
   background: linear-gradient(
     45deg,
     rgba(160, 160, 160, 1) 0%,
-    rgba(232, 232, 232, 1) 46%
+    rgba(232, 232, 232, 1) 0%
   );
-  // animation-duration: 8s;
-  // animation-name: silverShine;
-  // animation-iteration-count: infinite;
-  // animation-direction: alternate;
+  animation-duration: 6s;
+  animation-name: silverShine;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 .gold {
   background: linear-gradient(

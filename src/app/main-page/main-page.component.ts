@@ -87,6 +87,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   connected_users: number;
   app = environment.application;
   my_analysis_badge: string;
+
   async LogOut() {
     const mongo = environment.application.currentUser.mongoClient('Cluster0');
     const Data = mongo.db('Data');
@@ -120,7 +121,160 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.data.analysisDone();
   }
   isAnswering: boolean;
+  classement = [false,false,false]
   ngOnInit() {
+
+    this.backend.usersFromUser
+      .aggregate([
+        {
+          $match: {
+            roles: {
+              $in: ['Jury'],
+            },
+          },
+        },
+        {
+          $match: {
+            roles: {
+              $nin: ['Invité'], //, 'Admin', 'Observateur'],
+            },
+          },
+        },
+        {
+          $project: {
+            _id: true,
+            username: true,
+            ranking_sweet: {
+              $cond: [
+                {
+                  $in: [0, ['$sensory.tastes.sweet.trials']],
+                },
+                'noData',
+                {
+                  $subtract: [
+                    10,
+                    {
+                      $abs: '$sensory.tastes.sweet.quantification',
+                    },
+                  ],
+                },
+              ],
+            },
+            ranking_bitter: {
+              $cond: [
+                {
+                  $in: [0, ['$sensory.tastes.bitter.trials']],
+                },
+                'noData',
+                {
+                  $subtract: [
+                    10,
+                    {
+                      $abs: '$sensory.tastes.bitter.quantification',
+                    },
+                  ],
+                },
+              ],
+            },
+            ranking_sour: {
+              $cond: [
+                {
+                  $in: [0, ['$sensory.tastes.sour.trials']],
+                },
+                'noData',
+                {
+                  $subtract: [
+                    10,
+                    {
+                      $abs: '$sensory.tastes.sour.quantification',
+                    },
+                  ],
+                },
+              ],
+            },
+            ranking_salty: {
+              $cond: [
+                {
+                  $in: [0, ['$sensory.tastes.salty.trials']],
+                },
+                'noData',
+                {
+                  $subtract: [
+                    10,
+                    {
+                      $abs: '$sensory.tastes.salty.quantification',
+                    },
+                  ],
+                },
+              ],
+            },
+            ranking_umami: {
+              $cond: [
+                {
+                  $in: [0, ['$sensory.tastes.umami.trials']],
+                },
+                'noData',
+                {
+                  $subtract: [
+                    10,
+                    {
+                      $abs: '$sensory.tastes.umami.quantification',
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+        {
+          $project: {
+            username: true,
+            score: {
+              $avg: [
+                '$ranking_sweet',
+                '$ranking_salty',
+                '$ranking_bitter',
+                '$ranking_umami',
+                '$ranking_sour',
+              ],
+            },
+          },
+        },
+        {
+          $sort: {
+            score: -1,
+          },
+        },
+        {
+          $limit: 3,
+        },
+        {
+          $project: {
+            score: '$score',
+            username: {
+              $cond: [
+                {
+                  $in: ['$score', [null]],
+                },
+                null,
+                '$username',
+              ],
+            },
+          },
+        },
+      ])
+      .then((result) => {
+        // console.log(result);
+        // this.list = result;
+        result.forEach((winner) => {
+          let index = result.indexOf(winner);
+
+          if (winner._id == sessionStorage.getItem('userId')) {
+            this.classement[index]=true;
+            
+          }
+        });
+      });
     this.isAnswering = false;
     function canAnswer(analyse) {
       let today = new Date();
@@ -149,8 +303,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     const mongo = environment.application.currentUser.mongoClient('Cluster0');
     const Data = mongo.db('Data');
-    const Analyses = Data.collection('Analyses');
-    const users = Data.collection('users');
+    const Analyses = this.backend.AnalysesFromUser;
+    const users = this.backend.usersFromUser;
     //console.log(this.app.allUsers)
     users.findOne({ id: user.id }).then((value) => {
       // console.log(value);
