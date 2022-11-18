@@ -1,0 +1,233 @@
+<mat-drawer-container class="example-container">
+  <mat-drawer
+    #drawer
+    class="example-sidenav bg-dark"
+    opened="{{ isOut }}"
+    mode="side"
+  >
+    <div class="spacer"></div>
+    <!-- <div
+      class="
+        d-flex
+        flex-column
+        align-items-center align-items-sm-start
+        px-2
+        pt-2
+        text-white
+        
+      "
+    > -->
+    <!-- <mat-chip-list>
+      <mat-chip *ngIf="authorized; else unauthorized">Admin</mat-chip>
+      <ng-template #unauthorized>
+        <mat-chip>Jury</mat-chip></ng-template
+      ></mat-chip-list
+    > -->
+    <!-- <a
+        routerLink="/dashboard"
+        class="
+          d-flex
+          align-items-center
+          pb-3
+          mb-md-0
+          me-md-auto
+          text-white text-decoration-none
+        "
+      > -->
+    <!-- <img
+      src="http://cdn.shopify.com/s/files/1/0538/8242/1442/files/Feyel_claim-try.jpg?v=1618495488"
+      alt="menu"
+      width="50"
+      height="40"
+      class="rounded-circle mr-2"
+    /> -->
+    <!-- <span class="fs-5 d-none mt-3 d-sm-inline">Menu</span>
+      </a> -->
+    <mat-selection-list [multiple]="false">
+      <!-- <ul
+        class="
+          nav nav-pills
+          flex-column
+          mb-sm-auto mb-0
+          align-items-center align-items-sm-start
+        "
+        id="menu"
+      > -->
+
+      <mat-list-option
+        routerLink="home"
+        [selected]="selectedInSidenav('home')"
+        class="nav-item"
+        name="home"
+        id="home"
+      >
+        <span class="h80">
+          <mat-icon matTooltip="Accueil">home</mat-icon>
+          <span class="ms-1 d-none d-sm-inline">Accueil</span>
+        </span>
+      </mat-list-option>
+      <!-- <mat-list-option routerLink="register">
+      <span class="h80">
+        <mat-icon
+        matBadge="{{ analyses_actives }}"
+          matBadgeSize="small"
+          matTooltip="S'inscrire"
+          
+          >event_note</mat-icon
+        >
+        <span class="ms-1 d-none d-sm-inline">S'inscrire</span>
+      </span>
+    </mat-list-option> -->
+      <mat-list-option
+        routerLink="answer"
+        [selected]="selectedInSidenav('answer')"
+      >
+        <span class="h80">
+          <mat-icon
+            matBadge="{{ analyses_actives }}"
+            matBadgeSize="small"
+            matTooltip="Répondre"
+            >edit</mat-icon
+          >
+          <span class="ms-1 d-none d-sm-inline">Répondre</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option
+        *ngIf="jury"
+        routerLink="my-analysis"
+        [selected]="selectedInSidenav('my-analysis')"
+        class="nav-item"
+      >
+        <span class="h80">
+          <mat-icon
+            matBadge="{{ my_analysis_badge }}"
+            matBadgeSize="small"
+            matTooltip="Mes analyses"
+            >library_books</mat-icon
+          >
+          <span class="ms-1 d-none d-sm-inline">Mes analyses</span
+          ><span class="badge rounded-pill badge-notification">jury</span>
+        </span>
+      </mat-list-option>
+      <mat-list-option
+        *ngIf="jury"
+        routerLink="my-sensory-profile"
+        [selected]="selectedInSidenav('my-sensory-profile')"
+        class="nav-item"
+      >
+        <a class="h80">
+          <mat-icon matTooltip="Mon profil sensoriel">multiline_chart</mat-icon>
+          <span class="ms-1 d-none d-sm-inline">Mon profil sensoriel</span
+          ><span class="badge rounded-pill badge-notification">jury</span>
+        </a>
+      </mat-list-option>
+      <mat-list-option
+        routerLink="create-analysis"
+        [selected]="selectedInSidenav('create-analysis')"
+        *ngIf="authorized"
+        class="nav-item"
+      >
+        <a class="h80">
+          <mat-icon matTooltip="Créer une analyse">library_add</mat-icon>
+          <span class="ms-1 d-none d-sm-inline">Créer une analyse </span
+          ><span class="badge rounded-pill badge-notification">admin</span>
+        </a>
+      </mat-list-option>
+      <mat-list-option
+        routerLink="connected-users"
+        [selected]="selectedInSidenav('connected-users')"
+        *ngIf="authorized"
+        class="nav-item"
+      >
+        <a class="h80">
+          <mat-icon matBadgeSize="small" matTooltip="Utilisateurs"
+            >group</mat-icon
+          >
+          <span class="ms-1 d-none d-sm-inline">Utilisateurs </span
+          ><span class="badge rounded-pill badge-notification">admin</span>
+        </a>
+      </mat-list-option>
+      <mat-list-option
+        routerLink="sensory-profiles"
+        [selected]="selectedInSidenav('sensory-profiles')"
+        *ngIf="authorized"
+        class="nav-item"
+      >
+        <a class="h80">
+          <mat-icon matTooltip="Profils sensoriels">bubble_chart</mat-icon>
+          <span class="ms-1 d-none d-sm-inline">Profils sensoriels</span
+          ><span class="badge rounded-pill badge-notification">admin</span>
+        </a>
+      </mat-list-option>
+      <!-- </ul> -->
+    </mat-selection-list>
+    <!-- <hr /> -->
+
+    <!-- </div> -->
+  </mat-drawer>
+
+  <mat-toolbar class="bg-dark">
+    <button
+      type="button"
+      mat-icon-button
+      mat-button
+      (click)="drawer.toggle(); isOut = !isOut"
+    >
+      <mat-icon class="text-light" *ngIf="!isOut; else isIn"
+        >chevron_right</mat-icon
+      >
+      <ng-template #isIn
+        ><mat-icon class="text-light">chevron_left</mat-icon></ng-template
+      >
+    </button>
+
+    <!-- <button mat-button>
+      <mat-icon color="warn">sms_failed</mat-icon>
+    </button> -->
+    <button mat-button (click)="logRoute()">
+      <mat-icon color="accent">information</mat-icon>
+    </button>
+    <span class="example-spacer"></span>
+    <!-- <button mat-button [matMenuTriggerFor]="variableMenu">
+      <mat-icon color="primary">menu</mat-icon>
+    </button> -->
+    <div class="profile-button p-2">
+      <a [matMenuTriggerFor]="menu"
+        ><span class="d-none text-light d-sm-inline mx-1">{{ username }}</span
+        ><img
+          src="https://ui-avatars.com/api/?name={{ username }}"
+          alt="{{ username }}"
+          width="30"
+          height="30"
+          class="rounded-circle"
+        /><mat-icon class="pt-2 text-light">arrow_drop_down</mat-icon></a
+      >
+      <mat-menu #menu="matMenu">
+        <button disabled="{{ !jury }}" mat-button routerLink="profile">
+          <mat-icon class="mr-1 mb-1">perm_identity</mat-icon>Profil</button
+        ><br />
+        <button disabled="{{ !jury }}" mat-button routerLink="settings">
+          <mat-icon class="mr-1 mb-1">settings</mat-icon>Paramètres
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-button (click)="LogOut()">
+          <mat-icon class="mr-1 mb-1">logout</mat-icon>
+          Se déconnecter
+        </button>
+      </mat-menu>
+    </div>
+    <!-- <mat-menu #variableMenu="matMenu">
+      <button mat-menu-item>Choisir un modèle</button>
+      <button mat-menu-item>Créer un nouveau modèle</button>
+    </mat-menu> -->
+  </mat-toolbar>
+  <div class="example-sidenav-content">
+    <br />
+    <!-- <button mat-button (click)="GOMONGO()">GO MONGO</button> -->
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>
+<!-- <h1>Bienvenue {{ this.username }} !</h1>
+      <br /><br /> -->
+<!-- {{result}} -->

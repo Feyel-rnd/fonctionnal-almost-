@@ -1,0 +1,82 @@
+<button
+  class="backwards"
+  routerLink="/dashboard/my-analysis"
+  mat-button
+  color="primary"
+>
+  <mat-icon>arrow_back </mat-icon>Retour
+</button>
+<!-- <button (click)="printPDF()">Télécharger</button> -->
+<div id="rapport" class="box">
+  <div class="box">
+    <mat-card class="title">
+      <h1 class="text-center">
+        {{ analyse.name }}
+        <h3>({{ analyse.type }})</h3>
+      </h1>
+      <h4 class="text-center">
+        {{ analyse.answered.length }} dégustateur(s), le
+        {{ analyse.valid_on.toLocaleString().split(' ')[0] }}.
+      </h4> </mat-card
+    ><br />
+    <mat-tab-group
+      class="first-tab-group"
+      mat-stretch-tabs
+      [(selectedIndex)]="defaultIndex"
+    >
+      <mat-tab label="Vue globale">
+        <div *ngFor="let field of analyse.fields; let i = index">
+          <mat-card class="cal text-center">
+            {{ field.label }}
+            <div class="chart-wrapper">
+              <div *ngIf="field.format.name != 'input_text'; else input_text">
+                <div *ngIf="chartDataList[i] != undefined">
+                  <canvas
+                    baseChart
+                    id="barChart"
+                    [datasets]="chartDataList[i]"
+                    [options]="barChartOptions"
+                    [labels]="chartLabelsList[i]"
+                    [chartType]="barChartType"
+                    [colors]="barChartColors"
+                  >
+                  </canvas>
+                </div>
+              </div>
+              <ng-template #input_text>
+                <div
+                  *ngFor="let user of analyse.answered; let user_index = index"
+                  class="text-start"
+                >
+                  <mat-card class="boundaries"
+                    ><span class="quoting"
+                      >[{{ analyse.users[user_index].username }}]</span
+                    ><br />
+                    {{ user.fields[i] }}</mat-card
+                  >
+                </div>
+              </ng-template>
+            </div> </mat-card
+          ><br />
+        </div>
+      </mat-tab>
+      <mat-tab disabled="{{ !individualAnswersEnabled }}">
+        <ng-template mat-tab-label>
+          <span matBadge="{{ numberOfAnswers }}" matBadgeOverlap="false"
+            >Réponses individuelles</span
+          >
+        </ng-template>
+        <mat-tab-group [(selectedIndex)]="defaultIndex">
+          <mat-tab
+            *ngFor="let user of analyse.users"
+            label="{{ user.username }}"
+            ><button mat-button (click)="removeUserFromAnalysis(user, analyse)">
+              <mat-icon color="warn">delete</mat-icon></button
+            ><br /><mat-divider></mat-divider>
+            <app-analysis-view [userId]="user.id"></app-analysis-view>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

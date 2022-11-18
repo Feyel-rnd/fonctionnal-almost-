@@ -1,0 +1,342 @@
+<div class="header">
+  <h1 class="text-center font-weight-bold">Mes analyses sensorielles</h1>
+  <br />
+
+  <div *ngIf="vide == null; else FR"></div>
+  <ng-template #FR>
+    <div *ngIf="!vide; else empty"></div>
+
+    <div class="tableau">
+      <!-- <table
+        matSort
+        matSortActive="validity"
+        matSortDirection="asc"
+        (matSortChange)="sortData($event)"
+        class="text-center w-100"
+      >
+        <tr>
+          <th mat-sort-header="name">Nom</th>
+          <th mat-sort-header="type">Type</th>
+          <th mat-sort-header="validity">Date</th>
+          <th mat-sort-header="registered">Inscrit</th>
+          <th mat-sort-header="answered">Répondu</th>
+          <th *ngIf="authorized" mat-sort-header="active">
+            Visible<span class="badge bg-dark rounded-pill badge-notification"
+              >admin</span
+            >
+          </th>
+          <th mat-sort-header="actions">Actions</th>
+          
+        </tr>
+
+        <tr class="border" *ngFor="let analyse of sortedData">
+          <td>{{ analyse.name }}</td>
+          <td>
+            <mat-chip-list
+              ><mat-chip>{{
+                analyse.type.slice(0, 3)
+              }}</mat-chip></mat-chip-list
+            >
+          </td>
+          <td>
+            {{
+              analyse.valid_on.toLocaleString().split(' ')[0].split('/')[0] +
+                '/' +
+                analyse.valid_on.toLocaleString().split(' ')[0].split('/')[1]
+            }}
+          </td>
+          <td>
+            <span
+              *ngIf="
+                analyse.registered.indexOf(user.id) > -1;
+                else notRegistered
+              "
+            >
+              <mat-icon color="primary">event_available</mat-icon>
+            </span>
+            <ng-template #notRegistered>
+              <mat-icon color="warn">event_busy</mat-icon>
+            </ng-template>
+          </td>
+          <td>
+            <span *ngIf="hasAnswered(analyse, user); else notAnswered"
+              ><mat-icon color="primary">how_to_reg</mat-icon></span
+            >
+            <ng-template #notAnswered
+              ><mat-icon color="warn">clear</mat-icon></ng-template
+            >
+          </td>
+          <td *ngIf="authorized">
+            <mat-slide-toggle
+              #val
+              color="primary"
+              (change)="updateAnalysis(analyse, $event)"
+              [checked]="analyse.active == true"
+            ></mat-slide-toggle>
+          </td>
+
+          <td>
+            <button
+              disabled="{{ !hasAnswered(analyse, user) }}"
+              (click)="navigateToFoo(analyse._id)"
+              mat-icon-button
+              color="primary"
+            >
+              <mat-icon>remove_red_eye </mat-icon>
+            </button>
+
+            <span
+              *ngIf="
+                analyse.registered.indexOf(user.id) > -1;
+                else register_enabled
+              "
+            >
+              <span *ngIf="canRegister(analyse); else cannotRegister">
+                <button
+                  mat-icon-button
+                  disabled="{{ !canRegister(analyse) }}"
+                  color="accent"
+                  (click)="unregister(analyse, user.id)"
+                >
+                  <mat-icon
+                    matBadge="-"
+                    matBadgeSize="small"
+                    matBadgeColor="accent"
+                    >group</mat-icon
+                  >
+                </button></span
+              >
+              <ng-template #cannotRegister>
+                <button
+                  mat-icon-button
+                  disabled
+                  (click)="unregister(analyse, user.id)"
+                >
+                  <mat-icon>group</mat-icon>
+                </button>
+              </ng-template>
+            </span>
+            <ng-template #register_enabled>
+              <button
+                mat-icon-button
+                disabled="{{ !canRegister(analyse) }}"
+                color="primary"
+                (click)="register(analyse, user.id)"
+              >
+                <mat-icon>group_add</mat-icon>
+              </button></ng-template
+            >
+
+            <span *ngIf="authorized"
+              ><button
+                mat-icon-button
+                (click)="adminNavigateToFoo(analyse._id)"
+                color="accent"
+              >
+                <mat-icon>bar_chart </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="deleteAnalysis(analyse)"
+                color="warn"
+              >
+                <mat-icon>delete </mat-icon>
+              </button>
+            </span>
+          </td>
+          
+        </tr>
+      </table> -->
+      <!-- <button (click)="pagin()">pagin</button> -->
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Nom
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.name }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Type
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-chip-list
+              ><mat-chip>{{ row.type.slice(0, 3) }}</mat-chip></mat-chip-list
+            >
+          </mat-cell>
+        </ng-container>
+        <!-- displayedColumns = ['name', 'type', 'valid_on','registered','answered','active','actions']; -->
+        <ng-container matColumnDef="valid_on">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Valide le
+          </mat-header-cell>
+          <mat-cell *matCellDef="let analyse">
+            {{
+              analyse.valid_on.toLocaleString().split(' ')[0].split('/')[0] +
+                '/' +
+                analyse.valid_on.toLocaleString().split(' ')[0].split('/')[1] +
+                '/' +
+                analyse.valid_on
+                  .toLocaleString()
+                  .split(' ')[0]
+                  .split('/')[2]
+                  .split('20')[1]
+            }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="registered">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Inscrit
+          </mat-header-cell>
+          <mat-cell *matCellDef="let analyse">
+            <span
+              *ngIf="
+                analyse.registered.indexOf(userID) > -1;
+                else notRegistered
+              "
+            >
+              <mat-icon color="primary">event_available</mat-icon>
+            </span>
+            <ng-template #notRegistered>
+              <mat-icon color="warn">event_busy</mat-icon>
+            </ng-template>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="answered">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Répondu
+          </mat-header-cell>
+          <mat-cell *matCellDef="let analyse">
+            <span *ngIf="hasAnswered(analyse); else notAnswered"
+              ><mat-icon color="primary">how_to_reg</mat-icon></span
+            >
+            <ng-template #notAnswered
+              ><mat-icon color="warn">clear</mat-icon></ng-template
+            >
+          </mat-cell>
+        </ng-container>
+
+        <ng-container *ngIf="authorized" matColumnDef="active">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Active
+          </mat-header-cell>
+          <mat-cell *matCellDef="let analyse">
+            <mat-slide-toggle
+              #val
+              color="primary"
+              (change)="updateAnalysis(analyse, $event)"
+              [checked]="analyse.active == true"
+            ></mat-slide-toggle>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions" class="large">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Actions
+          </mat-header-cell>
+          <mat-cell *matCellDef="let analyse">
+            <span>
+              <button
+                disabled="{{ !hasAnswered(analyse) }}"
+                (click)="navigateToFoo(analyse._id)"
+                mat-icon-button
+                color="primary"
+              >
+                <mat-icon>remove_red_eye </mat-icon>
+              </button>
+
+              <span
+                *ngIf="
+                  analyse.registered.indexOf(userID) > -1;
+                  else register_enabled
+                "
+              >
+                <span *ngIf="canRegister(analyse); else cannotRegister">
+                  <button
+                    mat-icon-button
+                    disabled="{{ !canRegister(analyse) }}"
+                    color="accent"
+                    (click)="unregister(analyse, userID)"
+                  >
+                    <mat-icon
+                      matBadge="-"
+                      matBadgeSize="small"
+                      matBadgeColor="accent"
+                      >group</mat-icon
+                    >
+                  </button></span
+                >
+                <ng-template #cannotRegister>
+                  <button
+                    mat-icon-button
+                    disabled
+                    (click)="unregister(analyse, userID)"
+                  >
+                    <mat-icon>group</mat-icon>
+                  </button>
+                </ng-template>
+              </span>
+              <ng-template #register_enabled>
+                <button
+                  mat-icon-button
+                  disabled="{{ !canRegister(analyse) }}"
+                  color="primary"
+                  (click)="register(analyse, userID)"
+                >
+                  <mat-icon>group_add</mat-icon>
+                </button></ng-template
+              >
+
+              <span *ngIf="authorized"
+                ><button
+                  mat-icon-button
+                  (click)="adminNavigateToFoo(analyse._id)"
+                  color="accent"
+                >
+                  <mat-icon>bar_chart </mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  (click)="deleteAnalysis(analyse)"
+                  color="warn"
+                >
+                  <mat-icon>delete </mat-icon>
+                </button>
+              </span>
+            </span>
+          </mat-cell>
+        </ng-container>
+        <!-- <ng-container matColumnDef="color">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
+        </ng-container> -->
+
+        <mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+      </mat-table>
+
+      <mat-paginator
+        class="mat-paginator-sticky"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+      ></mat-paginator>
+    </div>
+    <!-- <mat-paginator
+      class="paginator"
+      (page)="handlePageEvent($event)"
+      [length]="length"
+      [pageSize]="pageSize"
+      [showFirstLastButtons]="showFirstLastButtons"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="pageIndex"
+    >
+    </mat-paginator> -->
+    <ng-template #empty>
+      Il n'y a pas d'analyse sensorielle à afficher pour le moment.
+    </ng-template>
+  </ng-template>
+</div>

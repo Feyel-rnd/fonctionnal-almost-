@@ -1,0 +1,17 @@
+<button
+  class="backwards"
+  routerLink="/dashboard/my-analysis"
+  mat-button
+  color="primary"
+  disabled="{{ ButtonDisabled }}"
+>
+  <mat-icon>arrow_back </mat-icon>Retour
+</button>
+<h1 class="text-center">Réponses à l'analyse</h1>
+<mat-card>
+  <app-form
+    [preview_analysis]="FormFields"
+    [ButtonDisabled]="true"
+    [completedForm]="answers.fields"
+  ></app-form>
+</mat-card>

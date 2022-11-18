@@ -1,0 +1,80 @@
+
+body {
+  background: rgb(99, 39, 120);
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ba68c8;
+}
+
+.profile-button {
+  background: rgb(99, 39, 120);
+  box-shadow: none;
+  border: none;
+}
+
+.profile-button:hover {
+  background: #682773;
+}
+
+.profile-button:focus {
+  background: #682773;
+  box-shadow: none;
+}
+
+.profile-button:active {
+  background: #682773;
+  box-shadow: none;
+}
+
+.back:hover {
+  color: #682773;
+  cursor: pointer;
+}
+.backwards {
+  align-items: flex-end;
+}
+.labels {
+  font-size: 11px;
+}
+
+.add-experience:hover {
+  background: #ba68c8;
+  color: #fff;
+  cursor: pointer;
+  border: solid 1px #ba68c8;
+}
+
+.check {
+  word-wrap: break-word;
+}
+
+mat-progress-bar {
+  height: 20px;
+  border-radius: 25px;
+}
+.Intermédiaire {
+  ::ng-deep .mat-progress-bar-fill::after {
+    background-color: rgb(184, 115, 51);
+  }
+}
+
+.Professionnel {
+  ::ng-deep .mat-progress-bar-fill::after {
+    background-color: silver;
+  }
+}
+
+.Expert {
+  ::ng-deep .mat-progress-bar-fill::after {
+    background-color: gold;
+  }
+}
+
+.Légende {
+  ::ng-deep .mat-progress-bar-fill::after {
+    background-color: violet;
+  }
+}
+

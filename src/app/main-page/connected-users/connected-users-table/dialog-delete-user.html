@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>⚠ Supprimer un utilisateur ⚠</h1>
+<div mat-dialog-content>
+  <p>Êtes-vous sur de vouloir supprimer cet utilisateur ?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick(false,this.data._id)">Annuler</button>
+  <button mat-button color="warn" (click)="onNoClick(true,this.data._id)">
+    Supprimer l'utilisateur
+  </button>
+  <!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button> -->
+</div>

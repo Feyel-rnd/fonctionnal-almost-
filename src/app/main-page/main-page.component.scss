@@ -1,0 +1,111 @@
+.cl {
+  color: aliceblue;
+  background-color: aliceblue;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.fixed-on-top {
+  position: sticky;
+  top: 0px;
+}
+
+.profile-btton {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 100;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+mat-list-option[aria-selected='false'] {
+  /* margin-bottom: 30px; */
+  height: 80px;
+  color: rgb(63, 120, 243);
+  background-color: transparent;
+  transition: background 0.5s;
+}
+
+mat-list-option[aria-selected='true'] {
+  height: 80px;
+  background-color: rgba(63, 120, 243, 0.7);
+  color: white;
+}
+
+.h80 {
+  display: flex;
+
+  height: 80px;
+  text-align: start;
+  align-items: center;
+}
+
+@keyframes iAmSelected {
+  from {
+    height: 80px;
+    color: rgb(63, 120, 243);
+    background-color: transparent;
+    transition: 0.5;
+  }
+
+  to {
+    height: 80px;
+    background-color: rgba(63, 120, 243, 0.7);
+    color: white;
+  }
+}
+
+mat-list-option[aria-selected='false']:hover {
+  animation-duration: 1s;
+  animation-name: iAmSelected;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* mat-list-option:hover {
+
+  background-color: rgba(63, 120, 243, 0.7);
+  
+  color : white;
+  transition: background 0.5s;
+} */
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+
+.spacer {
+  margin-bottom: 0px;
+}
+
+.example-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}

@@ -1,0 +1,80 @@
+<div ></div>
+<div *ngIf="!answering">
+  <h1 class="text-center font-weight-bold">Répondre à un questionnaire</h1>
+  <br />
+
+  <table matSort (matSortChange)="sortData($event)">
+    <tr>
+      <th mat-sort-header="name">Nom</th>
+      <!-- <th mat-sort-header="active">Etat</th> -->
+      <th mat-sort-header="type">Type</th>
+      <th mat-sort-header="validity">Ouvre le</th>
+      <th mat-sort-header="actions">Actions</th>
+      <!-- <th mat-sort-header="carbs">Carbs (g)</th>
+  <th mat-sort-header="protein">Protein (g)</th> -->
+    </tr>
+
+    <tr class="border text-center" *ngFor="let analyse of sortedData">
+      <td>{{ analyse.name }}</td>
+      <!-- <td><span *ngIf="analyse.active==true; else untrue">
+    <mat-chip-list>
+      <mat-chip class="activechip">Active</mat-chip>
+    </mat-chip-list>
+  </span>
+  <ng-template #untrue>
+  <mat-chip-list>
+  <mat-chip class="inactivechip"> Inactive</mat-chip>
+</mat-chip-list>
+  </ng-template>
+  </td> -->
+      <td><mat-chip-list><mat-chip>{{ analyse.type }}</mat-chip></mat-chip-list></td>
+      <td>{{ analyse.valid_on.toLocaleString().split(" ")[0].split("/")[0]+"/"+analyse.valid_on.toLocaleString().split(" ")[0].split("/")[1] }}</td>
+      <td>
+        <!-- , analyse._id.toString() -->
+        <button
+        
+          mat-icon-button
+          color="primary"
+          disabled="{{!canAnswer(analyse)}}"
+          
+          (click)="navigateToFoo(analyse._id.toString())"
+        >
+        <!-- (click)="navigateToFoo(analyse._id.toString())" -->
+          <mat-icon>edit </mat-icon>
+        </button>
+      </td>
+      <!-- <td>{{dessert.carbs}}</td>
+  <td>{{dessert.protein}}</td> -->
+    </tr>
+  </table>
+  <br />
+</div>
+
+<!-- <ng-template #isg>
+  <br>
+  <div>
+  <button
+  class = "backwards"
+    (click)="navigateToFoo()"
+    mat-button
+    color="primary"
+  >
+    <mat-icon>arrow_back </mat-icon>Retour arr</button
+  >
+  </div>
+  <br /><br />
+  <h1 class="text-center">{{ title }}</h1>
+  <div *ngFor="let champ of current_analysis">
+    
+    <div *ngIf="champ.format.name == 'radio button'; else slider">
+      <app-radio-button [field]="champ"></app-radio-button>
+    </div>
+    <ng-template #slider
+      >
+      <div  *ngIf="champ.format.name == 'slider';else last"><app-slider  [field]="champ"></app-slider
+    ></div></ng-template>
+    <ng-template #last></ng-template>
+    <br>
+  </div>
+  <input type="submit" class="fadeIn fourth" value="Envoyer la réponse" />
+</ng-template> -->

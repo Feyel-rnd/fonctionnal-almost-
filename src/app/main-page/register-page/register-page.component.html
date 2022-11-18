@@ -1,0 +1,12 @@
+<h1 class="text-center">Inscription à une analyse sensorielle</h1>
+
+<mat-card  class="container calendrier"
+      >
+      
+      
+      <mat-calendar [dateClass]="dateClass" [(selected)]="selectedDate" (selectedChange)="dateChanged($event)">
+     
+      </mat-calendar>
+      <button mat-button (click)="color()">test</button>
+      <!-- {{selectedDate}} -->
+     </mat-card>

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>⚠ Supprimer une analyse ⚠</h1>
+<div mat-dialog-content>
+  <p>Êtes-vous sur de vouloir supprimer cette analyse ?</p>
+  
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick(false,this.data._id)">Annuler</button>
+  <button mat-button color="warn" (click)="onNoClick(true,this.data._id)" >Supprimer l'analyse</button>
+  <!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button> -->
+</div>

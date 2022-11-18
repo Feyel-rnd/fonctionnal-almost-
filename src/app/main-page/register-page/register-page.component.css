@@ -1,0 +1,16 @@
+.mat-calendar-body-cell.highlight > .mat-calendar-body-cell-content,
+.mat-calendar-body-cell.highlight:hover > .mat-calendar-body-cell-content,
+.mat-calendar-body-cell.highlight > .mat-calendar-body-cell-content:hover {
+  border-color: #ab4545 !important;
+  color: #ab4545 !important;
+}
+
+.calendrier {
+  width: 80%;
+  max-width: 600px;
+  min-width: 200px;
+}
+button.example-custom-date-class {
+  background: rgb(63, 120, 243);
+  border-radius: 100%;
+}

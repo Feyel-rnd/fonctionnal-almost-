@@ -1,0 +1,148 @@
+button.example-custom-date-class {
+  background: rgb(63, 120, 243);
+  border-radius: 100%;
+}
+
+/* .calendrier {
+  width: 60%;
+} */
+.cont {
+  display: flex;
+  flex-direction: row;
+}
+.element {
+  width: 100%;
+}
+.upper {
+  position: relative;
+  bottom: 10px;
+}
+
+.bronze-medal {
+  font-size: 30px;
+}
+
+.silver-medal {
+  font-size: 35px;
+}
+
+.gold-medal {
+  font-size: 60px;
+}
+
+.bronze {
+  background: linear-gradient(
+    45deg,
+    rgba(223, 182, 103, 1) 0%,
+    rgba(249, 243, 232, 1) 26%,
+    rgba(231, 192, 116, 1) 96%
+  );
+  // animation-duration: 8s;
+  // animation-name: bronzeShine;
+  // animation-iteration-count: infinite;
+  // animation-direction: alternate;
+}
+.silver {
+  background: linear-gradient(
+    45deg,
+    rgba(160, 160, 160, 1) 0%,
+    rgba(232, 232, 232, 1) 46%
+  );
+  // animation-duration: 8s;
+  // animation-name: silverShine;
+  // animation-iteration-count: infinite;
+  // animation-direction: alternate;
+}
+.gold {
+  background: linear-gradient(
+    45deg,
+    rgba(242, 215, 12, 1) 0%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(252, 235, 0, 1) 96%
+  );
+  animation-duration: 6s;
+  animation-name: goldShine;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes goldShine {
+  @for $i from 0 through 25 {
+    #{$i*1% + 75%} {
+      background: linear-gradient(
+        45deg,
+        rgba(242, 215, 12, 1) 0%,
+        rgba(255, 255, 255, 1) 4% * $i,
+        rgba(252, 235, 0, 1) 96%
+      );
+    }
+  }
+}
+
+@keyframes bronzeShine {
+  @for $i from 0 through 25 {
+    #{$i*1% + 75%} {
+      background: linear-gradient(
+        45deg,
+        rgba(223, 182, 103, 1) 0%,
+        rgba(249, 243, 232, 1) 4% * $i,
+        rgba(231, 192, 116, 1) 96%
+      );
+    }
+  }
+}
+@keyframes silverShine {
+  @for $i from 0 through 25 {
+    #{$i*1% + 75%} {
+      background: linear-gradient(
+        45deg,
+        rgba(160, 160, 160, 1) 0%,
+        rgba(232, 232, 232, 1) 4% * $i
+      );
+    }
+  }
+}
+
+.container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.podium__item {
+  width: 200px;
+}
+
+.podium__rank {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // font-size: 35px;
+  color: #fff;
+}
+
+mat-chip {
+  position: relative;
+  left: 10px;
+}
+
+.podium__city {
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
+.podium__number {
+  width: 27px;
+  height: 75px;
+}
+
+.podium .first {
+  min-height: 300px;
+}
+
+.podium .second {
+  min-height: 200px;
+}
+
+.podium .third {
+  min-height: 100px;
+}

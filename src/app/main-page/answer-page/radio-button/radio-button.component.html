@@ -1,0 +1,31 @@
+<!-- <mat-card> -->
+<h3>
+  <label id="example-radio-group-label">{{ field.label }}</label>
+</h3>
+<mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  class="example-radio-group"
+  [(ngModel)]="radioValue"
+>
+  <mat-radio-button
+    class="example-radio-button"
+    (click)="addNewAnswer(choice)"
+    *ngFor="let choice of field.format.choices"
+    [value]="choice"
+    disabled="{{ ButtonDisabled }}"
+  >
+    {{ choice }}
+  </mat-radio-button>
+</mat-radio-group>
+
+<div *ngIf="prefilledValue != null">
+  Bonne(s) Réponse(s) :
+  <div *ngIf="field.format.right_answers != undefined; else noGoodAnswer">
+    {{ field.format.right_answers }}
+  </div>
+  <ng-template #noGoodAnswer>Aucune bonne réponse indiquée.</ng-template>
+</div>
+<!-- <div>Your favorite season is: {{ prefilledValue }}</div> -->
+
+<!-- 
+</mat-card> -->

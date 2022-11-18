@@ -1,0 +1,96 @@
+<button
+  class="backwards"
+  routerLink="/dashboard/answer"
+  mat-button
+  color="primary"
+  disabled="{{ ButtonDisabled }}"
+>
+  <mat-icon>arrow_back </mat-icon>Retour
+</button>
+<!-- <mat-tab-group>
+  <mat-tab label="101"> Content 1 </mat-tab>
+  <mat-tab label="258"> Content 2 </mat-tab>
+  <mat-tab label="147"> Content 3 </mat-tab>
+  <mat-tab label="456"> Content 1 </mat-tab>
+  <mat-tab label="693"> Content 2 </mat-tab>
+  <mat-tab label="741"> Content 3 </mat-tab>
+  <mat-tab label="963"> Content 1 </mat-tab>
+  <mat-tab label="322"> Content 2 </mat-tab>
+  <mat-tab label="879"> Content 3 </mat-tab>
+</mat-tab-group> -->
+<br />
+<div *ngIf="finished == false; else terminated">
+  <h1 class="text-center">{{ title }}</h1>
+  <form [formGroup]="Group">
+    <ng-container formArrayName="Array">
+      <div *ngFor="let champ of current_analysis; let index = index">
+        <mat-card>
+          <div *ngIf="champ.format.name == 'radio button'; else slider">
+            <app-radio-button
+              (newAnswerEvent)="addAnswer($event, index)"
+              [field]="champ"
+              [ButtonDisabled]="ButtonDisabled"
+              [prefilledValue]="completedForm[index]"
+            ></app-radio-button>
+          </div>
+          <ng-template #slider>
+            <div *ngIf="champ.format.name == 'slider'; else input_text">
+              <app-slider
+                (newAnswerEvent)="addAnswer($event, index)"
+                [field]="champ"
+                [ButtonDisabled]="ButtonDisabled"
+                [prefilledValue]="completedForm[index]"
+              ></app-slider>
+            </div>
+          </ng-template>
+          <ng-template #input_text>
+            <div *ngIf="champ.format.name == 'input_text'; else training">
+              <app-input-text
+                (newAnswerEvent)="addAnswer($event, index)"
+                [field]="champ"
+                [ButtonDisabled]="ButtonDisabled"
+                [prefilledValue]="completedForm[index]"
+              ></app-input-text>
+            </div>
+          </ng-template>
+          <ng-template #training>
+            <div *ngIf="champ.format.name == 'training'; else last">
+              <app-training-input
+                (newAnswerEvent)="addAnswer($event, index)"
+                [field]="champ"
+                [ButtonDisabled]="ButtonDisabled"
+                [prefilledValue]="completedForm[index]"
+              >
+              </app-training-input></div
+          ></ng-template>
+
+          <ng-template #last> </ng-template>
+        </mat-card>
+        <br />
+      </div>
+      <input
+        type="submit"
+        class="fadeIn fourth"
+        (click)="sendAnswer()"
+        value="Envoyer la réponse"
+        [disabled]="ButtonDisabled"
+      />
+    </ng-container>
+  </form>
+</div>
+<ng-template #terminated
+  ><h1 class="text-center">{{ title }}</h1>
+
+  <p class="text-center">
+    Votre réponse a bien été enregistrée.<br /><br />
+    <button
+      mat-button
+      class="border"
+      color="primary"
+      (click)="navigateToFoo(id)"
+      disabled="{{ !jury }}"
+    >
+      Consulter les réponses ✔
+    </button>
+  </p>
+</ng-template>

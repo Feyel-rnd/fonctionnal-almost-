@@ -1,0 +1,116 @@
+<mat-card class="text-center border"
+  ><h1>Bienvenue dans votre espace d'analyse sensorielle !</h1>
+
+  <!-- <img
+    src="http://cdn.shopify.com/s/files/1/0538/8242/1442/files/Feyel_claim-try.jpg?v=1618495488"
+    alt="menu"
+    width="200"
+    height="150"
+    class="" /> -->
+</mat-card>
+
+<br /><mat-card class="border h-100">
+  <h2 class="text-center">📢 Informations !</h2>
+  <mat-divider></mat-divider><br />
+  <div class="cont">
+    <mat-card class="element">
+      <h2 class="text-center">Meilleurs dégustateurs :<br /><br /></h2>
+      <div class="container podium">
+        <div class="podium__item">
+          <p class="podium__city">
+            <mat-chip-list>
+              <span *ngIf="list[1].username != null; else personne1">
+                <mat-chip class="silver">
+                  <img
+                    src="https://ui-avatars.com/api/?name={{
+                      list[1].username
+                    }}"
+                    alt="{{ list[1].username }}"
+                    width="30"
+                    height="30"
+                    class="rounded-circle"
+                  />{{ list[1].username }}
+                </mat-chip>
+                <!-- <span class="upper">avec {{ list[1].score }} /10 !</span> -->
+              </span></mat-chip-list
+            >
+            <ng-template #personne1>Personne pour le moment ...</ng-template>
+          </p>
+          <div class="podium__rank second silver">
+            <span class="silver-medal">🥈</span>
+          </div>
+        </div>
+        <div class="podium__item">
+          <p class="podium__city">
+            <mat-chip-list>
+              <span *ngIf="list[0].username != null; else personne">
+                <mat-chip class="gold">
+                  <img
+                    src="https://ui-avatars.com/api/?name={{
+                      list[0].username
+                    }}"
+                    alt="{{ list[0].username }}"
+                    width="30"
+                    height="30"
+                    class="rounded-circle"
+                  />{{ list[0].username }}
+                </mat-chip>
+                <!-- <span class="upper">avec {{ list[0].score }} /10 !</span> -->
+              </span></mat-chip-list
+            >
+            <ng-template #personne>Personne pour le moment ...</ng-template>
+          </p>
+          <div class="podium__rank first gold gold-medal">🥇</div>
+        </div>
+        <div class="podium__item">
+          <p class="podium__city">
+            <span class="bronze-medal"><br /><br /></span>
+            <mat-chip-list>
+              <span *ngIf="list[2].username != null; else personne2">
+                <mat-chip class="bronze">
+                  <img
+                    src="https://ui-avatars.com/api/?name={{
+                      list[2].username
+                    }}"
+                    alt="{{ list[2].username }}"
+                    width="30"
+                    height="30"
+                    class="rounded-circle"
+                  />{{ list[2].username }} </mat-chip
+                ><span class="upper">avec {{ list[2].score }} /10 !</span></span
+              ></mat-chip-list
+            >
+            <ng-template #personne2>Personne pour le moment ...</ng-template>
+          </p>
+          <div class="podium__rank third bronze bronze-medal">🥉</div>
+        </div>
+      </div>
+    </mat-card>
+    <!-- <mat-card class="element">
+      <canvas
+        baseChart
+        [datasets]="barChartData"
+        [options]="barChartOptions"
+        [labels]="barChartLabels"
+        [chartType]="barChartType"
+        [colors]="barChartColors"
+      >
+      </canvas>
+    </mat-card> -->
+  </div>
+  <br /><br />
+  <div class="cont">
+    <mat-card class="element">
+      <h3 class="text-center">Taux de présence aux analyses :</h3>
+      <canvas
+        baseChart
+        [datasets]="barChartData"
+        [options]="barChartOptions"
+        [labels]="barChartLabels"
+        [chartType]="barChartType"
+        [colors]="barChartColors"
+      >
+      </canvas>
+    </mat-card>
+  </div>
+</mat-card>

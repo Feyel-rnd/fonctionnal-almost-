@@ -1,0 +1,26 @@
+<!-- <mat-card class="example-result-card">
+<mat-card-content  > -->
+
+<div class="example-label-container">
+  <mat-form-field class="example-full-width" appearance="fill" class="show">
+    <h3>
+      <mat-label>{{ field.label }}</mat-label>
+    </h3>
+    <input
+      matInput
+      #valeur
+      (change)="addNewAnswer(valeur.value)"
+      [disabled]="ButtonDisabled"
+      [value]="inputValue"
+    />
+  </mat-form-field>
+</div>
+<div *ngIf="prefilledValue != null">
+  Bonne(s) Réponse(s) :
+  <div *ngIf="field.format.right_answers != undefined; else noGoodAnswer">
+    {{ field.format.right_answers }}
+  </div>
+  <ng-template #noGoodAnswer>Aucune bonne réponse indiquée.</ng-template>
+</div>
+<!-- </mat-card-content>
+</mat-card> -->

@@ -1,0 +1,567 @@
+<!-- <button mat-button [matMenuTriggerFor]="mod">A partir d'un modèle</button>
+<mat-menu #mod="matMenu">
+  <button mat-menu-item>Choisir un modèle</button>
+  <button mat-menu-item>Créer un nouveau modèle</button>
+</mat-menu>
+<button mat-button>Créer un formulaire vierge</button> -->
+
+<h1 class="text-center">
+  Créer un questionnaire
+  <h5>
+    <span class="badge bg-dark rounded-pill badge-notification">admin</span>
+  </h5>
+</h1>
+
+<mat-card class="fo">
+  <mat-tab-group class="w-100">
+    <mat-tab label="Créer une analyse">
+      <mat-stepper
+        #stepper
+        (selectionChange)="Explain($event)"
+        orientation="horizontal"
+      >
+        <mat-step [stepControl]="createForm">
+          <ng-template matStepLabel>Formulaire</ng-template>
+
+          <ng-template matStepContent>
+            <div>
+              <form [formGroup]="createForm" class="fo">
+                <mat-form-field class="title_input" appearance="fill">
+                  <mat-label>Nom de l'analyse</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="FormFields['name']"
+                    formControlName="analysis_name"
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Valide le</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="FormFields['valid_on']"
+                    formControlName="valid_on"
+                    [matDatepicker]="on"
+                  />
+                  <mat-hint>JJ/MM/AAAA</mat-hint>
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="on"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #on></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Type d'analyse</mat-label>
+                  <mat-select
+                    [(value)]="FormFields.type"
+                    [(ngModel)]="FormFields['type']"
+                    formControlName="analysis_type"
+                  >
+                    <mat-option
+                      *ngFor="let model of models"
+                      value="{{ model.name }}"
+                    >
+                      {{ model.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <div
+                  *ngIf="FormFields.type == 'Personnalisé'; else fields"
+                  class="table-responsive"
+                >
+                  <table class="" formArrayName="quantities">
+                    <tr>
+                      <th colspan="4">
+                        Champs du formulaire :
+
+                        <button
+                          mat-button
+                          mat-mini-fab
+                          color="primary"
+                          type="button"
+                          (click)="addQuantity()"
+                        >
+                          <mat-icon>add </mat-icon></button
+                        ><br /><br />
+                      </th>
+                    </tr>
+                    <tr
+                      *ngFor="
+                        let quantity of quantities().controls;
+                        let i = index
+                      "
+                    >
+                      <mat-card>
+                        <!--Nouvelle question -->
+                        <tr>
+                          <th colspan="1">
+                            <mat-form-field class="" appearance="fill">
+                              <mat-label>Nom du champ</mat-label>
+                              <input
+                                matInput
+                                [(ngModel)]="FormFields['fields'][i]['label']"
+                                [ngModelOptions]="{ standalone: true }"
+                              />
+                            </mat-form-field>
+                          </th>
+                          <th colspan="1">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Type de question</mat-label>
+                              <mat-select
+                                [(value)]="
+                                  FormFields['fields'][i]['format'].name
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let type of question_types"
+                                  value="{{ type.name }}"
+                                >
+                                  {{ type.displayName }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </th>
+                          <th colspan="1">
+                            <mat-slide-toggle
+                              [(ngModel)]="FormFields['fields'][i]['required']"
+                              [ngModelOptions]="{ standalone: true }"
+                              >Obligatoire</mat-slide-toggle
+                            >
+                          </th>
+                          <th class="pl-3">
+                            <button
+                              mat-button
+                              mat-mini-fab
+                              color="warn"
+                              type="button"
+                              (click)="removeQuantity(i)"
+                              class="btn-danger"
+                            >
+                              <mat-icon>delete </mat-icon>
+                            </button>
+                          </th>
+                        </tr>
+                        <!-- radio button -->
+                        <div
+                          *ngIf="
+                            FormFields['fields'][i]['format'].name ==
+                              'radio button';
+                            else slider
+                          "
+                        >
+                          <td>
+                            <mat-form-field
+                              class="example-chip-list"
+                              appearance="fill"
+                            >
+                              <mat-label>Choix possibles</mat-label>
+                              <mat-chip-list
+                                #chipList
+                                aria-label="Fruit selection"
+                                [(value)]="
+                                  FormFields['fields'][i]['format']['choices']
+                                "
+                              >
+                                <!--[(ngModel)]="FormFields['fields'][i]['format'].choices" [ngModelOptions]="{standalone: true}"-->
+                                <mat-chip
+                                  *ngFor="let fruit of formFruits[i]"
+                                  (removed)="remove(fruit, i)"
+                                >
+                                  {{ fruit }}
+                                  <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                  </button>
+                                </mat-chip>
+                                <input
+                                  placeholder="Ajouter un choix..."
+                                  [matChipInputFor]="chipList"
+                                  [matChipInputSeparatorKeyCodes]="
+                                    separatorKeysCodes
+                                  "
+                                  [matChipInputAddOnBlur]="addOnBlur"
+                                  (matChipInputTokenEnd)="add($event, i)"
+                                />
+                              </mat-chip-list>
+                            </mat-form-field>
+                          </td>
+                          <td>
+                            <mat-form-field appearance="fill">
+                              <mat-label>Bonnes réponses</mat-label>
+                              <mat-select
+                                multiple
+                                [(value)]="
+                                  FormFields['fields'][i]['format'][
+                                    'right_answers'
+                                  ]
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let topping of toppingList[i]"
+                                  class="correct_answers"
+                                  [value]="topping"
+                                  >{{ topping }}</mat-option
+                                >
+                              </mat-select>
+                            </mat-form-field>
+                          </td>
+                          <!-- <td>
+                            <mat-form-field appearance="fill">
+                              <mat-label>Type d'analyse</mat-label>
+                              <mat-select [(value)]="Question_Type[i][5]">
+                                <mat-option
+                                  *ngFor="let type of question_types"
+                                  value="{{ type.name }}"
+                                >
+                                  {{ type.displayName }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </td> -->
+                        </div>
+                        <!-- slider -->
+                        <ng-template #slider>
+                          <div
+                            *ngIf="
+                              FormFields['fields'][i]['format'].name ==
+                                'slider';
+                              else input_text
+                            "
+                          >
+                            <td>
+                              <mat-form-field appearance="fill">
+                                <mat-label>Minimum</mat-label>
+                                <input
+                                  matInput
+                                  [(ngModel)]="
+                                    FormFields['fields'][i]['format']['min']
+                                  "
+                                  [ngModelOptions]="{ standalone: true }"
+                                  (change)="
+                                    editFormFruits(
+                                      FormFields['fields'][i]['format']['min'],
+                                      FormFields['fields'][i]['format']['max'],
+                                      i
+                                    )
+                                  "
+                                />
+                              </mat-form-field>
+                            </td>
+
+                            <td>
+                              <mat-form-field appearance="fill">
+                                <mat-label>Maximum</mat-label>
+                                <input
+                                  matInput
+                                  [(ngModel)]="
+                                    FormFields['fields'][i]['format']['max']
+                                  "
+                                  [ngModelOptions]="{ standalone: true }"
+                                  (change)="
+                                    editFormFruits(
+                                      FormFields['fields'][i]['format']['min'],
+                                      FormFields['fields'][i]['format']['max'],
+                                      i
+                                    )
+                                  "
+                                />
+                              </mat-form-field>
+                            </td>
+                            <td>
+                              <mat-form-field appearance="fill">
+                                <mat-label>Bonnes réponses</mat-label>
+                                <mat-select
+                                  multiple
+                                  [(value)]="
+                                    FormFields['fields'][i]['format'][
+                                      'right_answers'
+                                    ]
+                                  "
+                                >
+                                  <mat-option
+                                    *ngFor="let topping of toppingList[i]"
+                                    class="correct_answers"
+                                    [value]="topping"
+                                    >{{ topping }}</mat-option
+                                  >
+                                </mat-select>
+                              </mat-form-field>
+                            </td>
+                          </div></ng-template
+                        >
+                        <!-- input_text -->
+                        <ng-template #input_text>
+                          <div
+                            *ngIf="
+                              FormFields['fields'][i]['format'].name ==
+                                'input_text';
+                              else training
+                            "
+                          >
+                            <mat-form-field appearance="fill">
+                              <mat-label>Champ texte ...</mat-label>
+                              <input matInput disabled />
+                            </mat-form-field></div
+                        ></ng-template>
+                        <!-- autre -->
+                        <ng-template #training>
+                          <div
+                            *ngIf="
+                              FormFields['fields'][i]['format'].name ==
+                                'training';
+                              else autre
+                            "
+                          >
+                            <mat-form-field appearance="fill">
+                              <mat-label>Goût lié</mat-label>
+                              <mat-select
+                                [(value)]="
+                                  FormFields['fields'][i]['format'][
+                                    'sensory_taste'
+                                  ]
+                                "
+                              >
+                                <mat-option>Aucun</mat-option>
+                                <mat-option
+                                  *ngFor="let taste of tastesTypes"
+                                  value="{{ taste.name }}"
+                                >
+                                  {{ taste.displayName }} :
+                                  {{ slidervalue.value }}/10
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-slider
+                              class="example-margin"
+                              [(value)]="
+                                FormFields['fields'][i]['format'][
+                                  'sensory_intensity'
+                                ]
+                              "
+                              [disabled]="
+                                FormFields['fields'][i]['format'][
+                                  'sensory_taste'
+                                ] == undefined
+                              "
+                              [max]="10"
+                              [min]="1"
+                              [step]="1"
+                              [thumbLabel]="true"
+                              [tickInterval]="1"
+                              #slidervalue
+                              [vertical]="false"
+                            >
+                            </mat-slider>
+                          </div>
+                        </ng-template>
+
+                        <ng-template #autre></ng-template>
+                      </mat-card>
+
+                      <br />
+                    </tr>
+                  </table>
+
+                  <br />
+
+                  <!-- {{this.productForm.value | json}} -->
+                </div>
+                <ng-template #fields></ng-template>
+                <!-- {{ this.productForm.value | json }} -->
+
+                <mat-form-field class="example-chip-list" appearance="fill">
+                  <mat-label>Rôles invités</mat-label>
+                  <mat-chip-list #roleList aria-label="Role selection">
+                    <mat-chip
+                      *ngFor="let role of roles"
+                      (removed)="removeInviteRole(role)"
+                    >
+                      {{ role }}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                    <input
+                      placeholder="Ajouter un rôle..."
+                      #roleInput
+                      [formControl]="roleCtrl"
+                      [matAutocomplete]="autoRole"
+                      [matChipInputFor]="roleList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      (matChipInputTokenEnd)="addInviteRole($event)"
+                    />
+                  </mat-chip-list>
+                  <mat-autocomplete
+                    #autoRole="matAutocomplete"
+                    (optionSelected)="selectedRole($event)"
+                  >
+                    <mat-option
+                      *ngFor="let role of filteredRoles | async"
+                      [value]="role"
+                    >
+                      {{ role }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="example-chip-list" appearance="fill">
+                  <mat-label>Personnes invitées</mat-label>
+                  <mat-chip-list #usList aria-label="User selection">
+                    <mat-chip
+                      *ngFor="let user of users"
+                      (removed)="removeInviteUser(user)"
+                    >
+                      {{ user }}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                    <input
+                      placeholder="Ajouter une personne..."
+                      #userInput
+                      [formControl]="userCtrl"
+                      [matAutocomplete]="autoUser"
+                      [matChipInputFor]="usList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      (matChipInputTokenEnd)="addInviteUser($event)"
+                    />
+                  </mat-chip-list>
+                  <mat-autocomplete
+                    #autoUser="matAutocomplete"
+                    (optionSelected)="selectedUser($event)"
+                  >
+                    <mat-option
+                      *ngFor="let user of filteredUsers | async"
+                      [value]="user"
+                    >
+                      {{ user }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </form>
+            </div>
+
+            <button
+              value="Prévisualisation"
+              class="Create"
+              mat-button
+              matStepperNext
+            >
+              Prévisualisation
+            </button>
+          </ng-template>
+        </mat-step>
+        <mat-step [stepControl]="createForm" [editable]="isEditable">
+          <ng-template matStepLabel>Prévisualisation</ng-template>
+          <ng-template matStepContent>
+            <!--contenu de answer-page/form paramétré avec FormFields['fields']-->
+            <mat-card>
+              <br />
+              <!-- <mat-slide-toggle #ap>hey</mat-slide-toggle> -->
+              <!-- <h1 class="text-center">{{ FormFields['name'] }}</h1> -->
+              <div *ngIf="value_Index">
+                <app-form [preview_analysis]="FormFields" [ButtonDisabled]="true"></app-form>
+              </div>
+            </mat-card>
+            <span>
+              <button
+                class="Create"
+                type="button"
+                mat-button
+                matStepperPrevious
+              >
+                Retour
+              </button>
+              <button type="button" mat-button class="Create" matStepperNext>
+                Terminer la prévisualisation
+              </button></span
+            >
+            <!-- <button mat-button matStepperNext>Next</button> -->
+          </ng-template>
+        </mat-step>
+        <mat-step [editable]="isEditable">
+          <ng-template matStepLabel>Envoi</ng-template>
+          <p>Le formulaire est prêt à être envoyé et enregistré !</p>
+          <!-- <button mat-button matStepperPrevious>Retour</button> -->
+          <span class="d-flex"
+            ><button mat-button class="Create" (click)="stepper.reset()">
+              <mat-icon class="mb-1">arrow_back</mat-icon>Créer une autre
+              analyse</button
+            ><button
+              type="button"
+              mat-button
+              disabled="{{ createForm.status == 'INVALID' }}"
+              class="Create"
+              (click)="onSubmitDo(); stepper.reset()"
+            >
+              Créer le formulaire <mat-icon class="mb-1">add</mat-icon>
+            </button></span
+          >
+        </mat-step>
+      </mat-stepper>
+    </mat-tab>
+    <mat-tab label="Editer un modèle">
+      <h1 class="text-center font-weight-bold">Tous les modèles</h1>
+      <br />
+
+      <table matSort>
+        <tr>
+          <th mat-sort-header="name">Nom du modèle</th>
+          <th mat-sort-header="created_at">Créé le</th>
+          <!-- <th mat-sort-header="last_login">Dernière connexion</th> -->
+          <th mat-sort-header="actions">Actions</th>
+          <!-- <th mat-sort-header="actions">Actions</th> -->
+          <!-- <th mat-sort-header="carbs">Carbs (g)</th>
+  <th mat-sort-header="protein">Protein (g)</th> -->
+        </tr>
+
+        <tr class="border" *ngFor="let model of modelTable">
+          <td>{{ model.name }}</td>
+          <td>{{ model.created_at.toLocaleString().split(' ')[0] }}</td>
+          <td>
+            <mat-icon color="primary">edit</mat-icon>
+            <mat-icon color="warn">delete</mat-icon>
+          </td>
+          <td></td>
+          <!--   
+  <td><span *ngIf="this.app.allUsers[user.id].isLoggedIn; else untrue">
+    <mat-chip-list>
+      <mat-chip class="activechip">Connecté</mat-chip>
+    </mat-chip-list>
+  
+  </span>
+  <ng-template #untrue>
+  <mat-chip-list>
+  <mat-chip class="inactivechip"> Déconnecté</mat-chip>
+</mat-chip-list>
+  </ng-template>
+  </td>
+  
+  <td>
+    <span *ngIf="this.app.allUsers[user.id].isLoggedIn && myID!=user.id; else untrue2">
+    <button  mat-mini-fab color="primary" (click)="logOut(user.id)" >
+  <mat-icon>logout
+  </mat-icon>
+</button>
+</span>
+<ng-template #untrue2><button disabled mat-mini-fab >
+<mat-icon>logout
+</mat-icon>
+</button>
+</ng-template>
+
+</td> -->
+          <!-- <td>{{dessert.carbs}}</td>
+  <td>{{dessert.protein}}</td> -->
+        </tr>
+      </table>
+      <br />
+      <div class="end-button">
+        <button mat-fab color="primary"><mat-icon>add</mat-icon></button>
+      </div>
+      <br />
+    </mat-tab>
+    <!-- <mat-tab label="Third"> Content 3 </mat-tab> -->
+  </mat-tab-group>
+</mat-card>

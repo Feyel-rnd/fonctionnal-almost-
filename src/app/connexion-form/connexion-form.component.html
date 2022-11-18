@@ -1,0 +1,121 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+
+    <div class="fadeIn first">
+      <img
+        src="http://cdn.shopify.com/s/files/1/0538/8242/1442/files/Feyel_claim-try.jpg?v=1618495488"
+        id="icon"
+        alt="User Icon"
+      />
+    </div>
+    <br />
+    <mat-label class="h4">Analyse sensorielle</mat-label>
+
+    <!-- Login Form -->
+    <form id="loginform" [formGroup]="signinForm" (ngSubmit)="loginUser()">
+      <p
+        *ngIf="!connected"
+        id="login-alert"
+        class="alert alert-danger col-sm-12"
+      >
+        Erreur lors de la connexion. Vérifiez votre nom d'utilisateur et votre
+        mot de passe.
+      </p>
+      <input
+        mat-input
+        type="text"
+        formControlName="email"
+        id="email"
+        #email
+        class="fadeIn second"
+        name="email"
+        placeholder="Email"
+      />
+      <div
+        *ngIf="signinForm.controls['email'].invalid && !correctForm"
+        class="alert alert-danger"
+      >
+        <div
+          *ngIf="signinForm.controls['email'].errors?.['required']  && !correctForm"
+        >
+          L'email est obligatoire.
+        </div>
+      </div>
+
+      <input
+        mat-input
+        id="password"
+        formControlName="password"
+        #password
+        type="password"
+        class="fadeIn third"
+        name="password"
+        placeholder="Mot de passe"
+        mat-input
+      />
+
+      <div
+        *ngIf="signinForm.controls['password'].invalid && !correctForm"
+        class="alert alert-danger"
+      >
+        <div *ngIf="signinForm.controls['password'].errors?.['required']  ">
+          Le mot de passe est obligatoire.
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="fadeIn fourth"
+        (click)="Log(email.value, password.value)"
+      >
+        Se Connecter
+      </button>
+      <mat-divider></mat-divider>
+
+      <mat-expansion-panel
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+      >
+        <mat-expansion-panel-header>
+          <!-- <mat-panel-title> Rejoindre en tant qu'invité</mat-panel-title> -->
+          <mat-panel-description>
+            Rejoindre en tant qu'invité
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <button type="button" class="fadeIn fourth" (click)="anonymousLog()">
+          Rejoindre en tant qu'invité
+        </button>
+      </mat-expansion-panel>
+      <br />
+      <div></div>
+
+      <div>
+        Je n'ai pas encore de compte :
+        <a class="underlineHover" href="/create-account"> Créer un compte</a>
+      </div>
+    </form>
+
+    <div class="loading" *ngIf="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <div id="formFooter">
+      <a class="underlineHover" href="/forgot-password">Mot de passe oublié?</a>
+    </div>
+
+    <!-- 
+<button mat-button (click)="Log()"> Login</button>
+<button mat-button (click)="insert_doc()"> Inserer</button> -->
+  </div>
+</div>

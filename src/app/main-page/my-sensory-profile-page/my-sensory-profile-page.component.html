@@ -1,0 +1,70 @@
+<div *ngIf="allProfiles; else personalProfile">
+  <h1 class="text-center">
+    Profils du Jury
+    <h5>
+      <span class="badge bg-dark rounded-pill badge-notification">admin</span>
+    </h5>
+  </h1>
+</div>
+<ng-template #personalProfile
+  ><h1 class="text-center">Mon profil</h1></ng-template
+>
+<mat-tab-group>
+  <mat-tab label="Profil sensoriel">
+    <div class="box">
+      <mat-card class="cal">
+        <h1 class="text-center">Ecarts moyens à l'input</h1>
+
+        <div class="chart-wrapper text-center">
+          <!-- <section class="example-section">
+<mat-checkbox color="primary" [(ngModel)]="ecarts_groupe_checked" (change)="modify('ecarts','groupe')" class="pr-5">
+  Afficher les valeurs du groupe
+</mat-checkbox>
+<mat-checkbox [(ngModel)]="ecarts_input_checked" (change)="modify('ecarts','input')" color="primary">
+Afficher l'input
+</mat-checkbox>
+</section> -->
+          <canvas
+            baseChart
+            id="radarChart"
+            [datasets]="radarChartData"
+            [options]="radarChartOptions"
+            [labels]="radarChartLabels"
+            [chartType]="radarChartType"
+            [colors]="radarChartColors"
+          >
+          </canvas>
+        </div>
+      </mat-card>
+      <br />
+      <mat-card class="cal">
+        <h1 class="text-center">Taux de succès d'identification des goûts</h1>
+
+        <div class="chart-wrapper text-center">
+          <!-- <section class="example-section">
+<mat-checkbox color="primary"  class="pr-5">
+  Afficher les valeurs du groupe
+</mat-checkbox>
+
+</section> -->
+          <canvas
+            baseChart
+            id="barChart"
+            [datasets]="barChartData"
+            [options]="barChartOptions"
+            [labels]="barChartLabels"
+            [chartType]="barChartType"
+            [colors]="barChartColors"
+          >
+          </canvas>
+        </div>
+      </mat-card>
+    </div>
+  </mat-tab>
+  <mat-tab disabled="true" label="Tests discriminatifs">
+    Pas de contenu pour le moment.
+  </mat-tab>
+  <mat-tab disabled="true" label="Autre"
+    >Pas de contenu pour le moment.
+  </mat-tab>
+</mat-tab-group>

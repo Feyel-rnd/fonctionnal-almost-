@@ -1,0 +1,52 @@
+<h3>
+  Veuillez déterminer le goût et quantifier l'intensité de l'échantillon suivant
+  :<br /><br />
+  <h1 class="echantillon">{{ field.label }}</h1>
+</h3>
+<br />
+<span class="container d-flex">
+  <mat-radio-group
+    aria-labelledby="example-radio-group-label"
+    class="example-radio-group"
+    [(ngModel)]="valeur"
+  >
+    <mat-radio-button
+      class="example-radio-button"
+      (click)="
+        addNewAnswer({
+          sensory_intensity: slidervalue,
+          sensory_taste: transform(choice)
+        })
+      "
+      *ngFor="let choice of choices"
+      disabled="{{ ButtonDisabled }}"
+      [value]="choice"
+      color="primary"
+    >
+      {{ choice }}
+    </mat-radio-button>
+  </mat-radio-group>
+  <span class="container training">
+    <mat-slider
+      (click)="
+        addNewAnswer({
+          sensory_intensity: slidervalue,
+          sensory_taste: transform(valeur)
+        })
+      "
+      class="example-margin"
+      [max]="10"
+      [min]="1"
+      [step]="1"
+      disabled="{{ ButtonDisabled }}"
+      [(ngModel)]="slidervalue"
+      [thumbLabel]="true"
+      [tickInterval]="1"
+      aria-labelledby="example-name-label"
+      color="primary"
+    >
+    </mat-slider>
+    <h2 class="border text-center">Intensité : {{ slidervalue }}/10</h2>
+  </span>
+</span>
+<div *ngIf="prefilledValue != null">Bonne Réponse : <br /></div>

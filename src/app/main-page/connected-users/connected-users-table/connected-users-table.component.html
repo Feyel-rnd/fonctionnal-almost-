@@ -1,0 +1,118 @@
+<h1 class="text-center font-weight-bold">
+  Tous les utilisateurs
+  <h5>
+    <span class="badge bg-dark rounded-pill badge-notification">admin</span>
+  </h5>
+</h1>
+<br />
+
+<!-- <table matSort (matSortChange)="sortData($event)">
+  <tr>
+    <th mat-sort-header="username">Nom</th>
+    <th mat-sort-header="email">Email</th>
+    <th mat-sort-header="last_login">Dernière connexion</th>
+    <th mat-sort-header="active">Roles</th>
+    <th mat-sort-header="actions">Actions</th>
+  </tr>
+
+  <tr class="border" *ngFor="let user of sortedData">
+    <td>
+      <img
+        src="https://ui-avatars.com/api/?name={{ user.username }}"
+        alt="hugenerd"
+        width="30"
+        height="30"
+        class="rounded-circle"
+      />{{ user.username }}
+    </td>
+    <td>{{ user.user_mail }}</td>
+    <td>{{ user.last_login.toLocaleString() }}</td>
+    <td>
+      <span *ngFor="let role of user.roles">
+        <mat-chip-list
+          ><mat-chip>{{ role }}</mat-chip></mat-chip-list
+        >
+      </span>
+    </td>
+    <td>
+      <button (click)="navigateToFoo(user.id)" mat-icon-button color="primary">
+        <mat-icon>remove_red_eye </mat-icon>
+      </button>
+    </td>
+  </tr>
+</table> -->
+<div clas="tableau">
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Nom </mat-header-cell>
+      <mat-cell *matCellDef="let user"
+        ><img
+          src="https://ui-avatars.com/api/?name={{ user.username }}"
+          alt="{{ user.username }}"
+          width="30"
+          height="30"
+          class="rounded-circle"
+        />
+        {{ user.username }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Email
+      </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.user_mail }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="last_login">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Dernière Connexion
+      </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        {{ user.last_login.toLocaleString() }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="roles">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Rôles
+      </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <mat-chip-list
+          ><mat-chip *ngFor="let role of user.roles">{{
+            role
+          }}</mat-chip></mat-chip-list
+        >
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        Actions
+      </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <button
+          (click)="navigateToFoo(user.id)"
+          mat-icon-button
+          color="primary"
+        >
+          <mat-icon>visibility </mat-icon>
+        </button>
+        <button mat-icon-button (click)="removeUser(user.id)" color="warn">
+          <mat-icon>delete </mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row
+      *matHeaderRowDef="displayedColumns; sticky: true"
+    ></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
+  </mat-table>
+
+  <mat-paginator
+    class="mat-paginator-sticky"
+    [pageSizeOptions]="[12, 24, 50, 100]"
+  ></mat-paginator>
+  <br />
+</div>
