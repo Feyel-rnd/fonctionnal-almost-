@@ -59,17 +59,15 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  openDialog(): void {
+  openDialog(url): void {
     //console.log(analyseID)
     const dialogRef = this.dialog.open(DialogInfo, {
       width: '360px',
-      data: { _id: '' },
+      data: { url: url },
     });
   }
   logRoute() {
-    if (this.router.url == '/dashboard/home') {
-      this.openDialog();
-    }
+    this.openDialog(this.router.url);
   }
 
   constructor(
@@ -467,26 +465,23 @@ export class DialogInfo implements OnInit {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, { duration: 3000 });
   }
-
+  content = '';
   ngOnInit() {
     this.user = this.app.allUsers[sessionStorage.getItem('userId')];
-
-    // console.log(this.analysis.length);
-    this.mongo = this.user.mongoClient('Cluster0');
-    const Data = this.mongo.db('Data');
-    this.Analyses = Data.collection('Analyses');
+    console.log(this.data.url);
+    if (this.data.url == '/dashboard/home') {
+      this.content =
+        "Ici, vous pouvez consulter le classement des trois meilleurs dégustateurs ainsi que le taux de présence aux analyses. Le classement est effectué en se basant sur les succès obtenus aux dégustations, et la proximité des réponses par rapport à l'input.";
+    } else {
+      this.content = 'Aucune aide disponible pour cette page.';
+    }
   }
 
   onNoClick(val: boolean, id: any): void {
     //console.log(this.data._id)
-    if (val) {
-      this.dialogRef.close(true);
-      this.openSnackBar('Analyse supprimée !', '');
-    }
+
+    this.dialogRef.close(true);
+
     //console.log(val)
-    else {
-      this.openSnackBar('Opération annulée.', '');
-      this.dialogRef.close(false);
-    }
   }
 }
